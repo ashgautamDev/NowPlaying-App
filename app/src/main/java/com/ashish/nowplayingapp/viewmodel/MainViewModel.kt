@@ -33,12 +33,12 @@ class MainViewModel @Inject constructor(
     val nowPlayingState = _nowPlayingState.asStateFlow()
     val favState = _favState.asStateFlow()
 
-    val nowPlayingMovies : Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)){
-      MoviePagingSource(movieRepository)
+    val nowPlayingMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
+        MoviePagingSource(movieRepository)
     }.flow
 
-    val popularMovies : Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)){
-      MoviePagingSource(movieRepository)
+    val popularMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
+        MoviePagingSource(movieRepository)
     }.flow
 
 
@@ -46,21 +46,20 @@ class MainViewModel @Inject constructor(
     init {
 
         viewModelScope.launch {
-          favMovieRepository.getAllFavouritesMovies().collect(){ result ->
-              if (result.isNullOrEmpty()){
-              _favState.value = FavViewState.Empty
-              } else {
-                  _favState.value = FavViewState.Success(result)
+            favMovieRepository.getAllFavouritesMovies().collect() { result ->
+                if (result.isNullOrEmpty()) {
+                    _favState.value = FavViewState.Empty
+                } else {
+                    _favState.value = FavViewState.Success(result)
 
-              }
-          }
+                }
+            }
         }
 
 
     }
 
-
-    fun getMovie(id : Int) = viewModelScope.launch {
+    fun getMovie(id: Int) = viewModelScope.launch {
         movieRepository.getMovie(id)
     }
 
@@ -68,9 +67,13 @@ class MainViewModel @Inject constructor(
     fun addFavMovie(movie: FavMovie) = viewModelScope.launch {
         favMovieRepository.insertFavMovie(movie)
     }
+
     // deleting from db
     fun deleteFavMovie(movie: FavMovie) = viewModelScope.launch {
         favMovieRepository.deleteFavMovie(movie)
     }
+
+    fun getMovieFromId(favMovie: FavMovie) = getMovie(favMovie.id)
+
 
 }
