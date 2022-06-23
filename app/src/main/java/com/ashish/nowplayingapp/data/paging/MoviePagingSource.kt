@@ -7,7 +7,7 @@ import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.model.MovieResponse
 import javax.inject.Inject
 
-class MoviePagingSource @Inject constructor(
+class MoviePagingSource(
     private val movieRepository: MovieRepository
 ) : PagingSource<Int , Movie>() {
 
@@ -33,7 +33,4 @@ class MoviePagingSource @Inject constructor(
     }
 
 
-    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-        TODO("Not yet implemented")
-    }
 }
