@@ -6,9 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import com.ashish.nowplayingapp.ui.screen.HomeScreen
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
-import dagger.hilt.EntryPoint
 
-@EntryPoint
+
+
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
