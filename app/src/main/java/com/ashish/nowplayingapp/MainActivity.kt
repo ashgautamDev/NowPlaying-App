@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import com.ashish.nowplayingapp.ui.screen.HomeScreen
+import com.ashish.nowplayingapp.navigation.NavGraph
+import com.ashish.nowplayingapp.ui.theme.NowPlayingAppTheme
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
@@ -16,7 +18,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
 
-            HomeScreen(viewModel)
+            NowPlayingAppTheme {
+                NavGraph(viewModel)
+            }
         }
     }
 }
