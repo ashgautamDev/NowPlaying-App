@@ -5,6 +5,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ashish.nowplayingapp.ui.components.RatingBarStyle
 import com.ashish.nowplayingapp.ui.components.StepSize
+import com.ashish.nowplayingapp.ui.theme.accent
 
 class RatingBarConfig {
     var size: Dp = 24.dp
@@ -19,7 +20,7 @@ class RatingBarConfig {
         private set
     var activeColor: Color = Color.Green
         private set
-    var inactiveColor: Color = Color.Green.copy(alpha = 0.5f)
+    var inactiveColor: Color = accent.copy(alpha = 0.5f)
         private set
     var stepSize: StepSize = StepSize.ONE
         private set

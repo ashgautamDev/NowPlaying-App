@@ -20,7 +20,7 @@ private val LightColorPalette = lightColors(
     background = Color.White,
     surface = Color.White,
     onPrimary = primary_text,
-    onSecondary = secondary_text,
+    onSecondary = icons,
     onBackground = Color.Black,
     onSurface = Color.Black
 )

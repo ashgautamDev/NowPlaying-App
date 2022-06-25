@@ -1,5 +1,7 @@
 package com.ashish.nowplayingapp.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -11,6 +13,7 @@ import com.ashish.nowplayingapp.data.repository.MovieRepository
 import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
+import com.ashish.nowplayingapp.utils.MovieState
 import com.ashish.nowplayingapp.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -32,6 +35,10 @@ class MainViewModel @Inject constructor(
     // UI collects from this StateFlow to get it"s state update
     val nowPlayingState = _nowPlayingState.asStateFlow()
     val favState = _favState.asStateFlow()
+
+
+    private var _movieState = mutableStateOf(false)
+    val movieState = _movieState
 
     val nowPlayingMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
         MoviePagingSource(movieRepository)
@@ -59,7 +66,7 @@ class MainViewModel @Inject constructor(
 
     }
 
-    fun getMovie(id: Int) = viewModelScope.launch {
+    fun getMovie(id: Long) = viewModelScope.launch {
         movieRepository.getMovie(id)
     }
 
@@ -75,5 +82,8 @@ class MainViewModel @Inject constructor(
 
 //    fun getMovieFromId(favMovie: FavMovie) = getMovie(favMovie)
 
+    fun setListToPopular(){
+        _movieState.value = true
+    }
 
 }

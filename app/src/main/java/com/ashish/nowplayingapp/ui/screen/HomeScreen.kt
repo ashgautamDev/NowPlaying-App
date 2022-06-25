@@ -1,33 +1,36 @@
 package com.ashish.nowplayingapp.ui.screen
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import com.ashish.nowplayingapp.R
 import com.ashish.nowplayingapp.model.FavMovie
-import com.ashish.nowplayingapp.ui.components.ListDropDown
 import com.ashish.nowplayingapp.ui.components.MovieCard
 import com.ashish.nowplayingapp.ui.components.PopularityDropDown
 import com.ashish.nowplayingapp.ui.components.TopAppBar
 import com.ashish.nowplayingapp.ui.states.ErrorCard
 import com.ashish.nowplayingapp.ui.states.LoadingItem
 import com.ashish.nowplayingapp.ui.states.LoadingView
+import com.ashish.nowplayingapp.utils.MovieState
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
 
 const val TAG = "Home"
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel) {
-    var indexFilter by remember { mutableStateOf(1) }
-    var indexList by remember { mutableStateOf(1) }
+fun HomeScreen(viewModel: MainViewModel , navController: NavController) {
+    var popularIndex by remember { mutableStateOf(1) }
+
 
 //    if (indexFilter == 0) {
 //        Log.d(TAG, "MovieListView: we are showing Most Popular Movies ")
@@ -37,13 +40,12 @@ fun HomeScreen(viewModel: MainViewModel) {
 
     Scaffold(
         topBar = {
-            TopAppBar()
+            TopAppBar(R.string.home_tagline ,R.string.greeting_title, icon = Icons.Filled.Favorite){
+                navController.navigate("fav")
+            }
         }
     ) {
-
         MovieListView(viewModel = viewModel)
-
-
     }
 
 
@@ -53,36 +55,42 @@ fun HomeScreen(viewModel: MainViewModel) {
 fun MovieListView(viewModel: MainViewModel) {
 
     val lazyMovieItems = viewModel.nowPlayingMovies.collectAsLazyPagingItems()
+    val lazyPopularMovieItems = viewModel.popularMovies.collectAsLazyPagingItems()
+
+    val movieItems = if (!viewModel.movieState.value) lazyMovieItems else lazyPopularMovieItems
+
 
     LazyColumn {
         item {
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(), horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                ListDropDown(index = 1)
-                PopularityDropDown(index = 1)
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp, 0.dp, 16.dp, 0.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+        ) {
+            PopularityDropDown(){
+                viewModel.setListToPopular()
             }
-        }
-
-        items(lazyMovieItems) { item ->
+            } }
+        items(movieItems) { item ->
 
             MovieCard(movie = item!!) {
                 //For Now just save on first click to db
-
-                if (it) Log.d(
-                    TAG,
-                    "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite "
-                ) else Log.d(TAG, "MovieListView: It is Not favorite ")
                 val favMovie = FavMovie(item.id)
                 viewModel.addFavMovie(favMovie)
+                if (it) {
+                    Log.d(
+                        TAG,
+                        "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite "
+                    )
 
+                }else Log.d(TAG, "MovieListView: ${item.original_title} with id ${item.id} It is Not favorite ")
             }
 
+
         }
-        lazyMovieItems.apply {
+        movieItems.apply {
             when {
                 loadState.refresh is LoadState.Loading -> {
                     item {
@@ -95,14 +103,14 @@ fun MovieListView(viewModel: MainViewModel) {
                     }
                 }
                 loadState.refresh is LoadState.Error -> {
-                    val e = lazyMovieItems.loadState.refresh as LoadState.Error
+                    val e = movieItems.loadState.refresh as LoadState.Error
                     item {
                         ErrorCard(message = e.error.localizedMessage!!)
 
                     }
                 }
                 loadState.append is LoadState.Error -> {
-                    val e = lazyMovieItems.loadState.append as LoadState.Error
+                    val e = movieItems.loadState.append as LoadState.Error
                     item {
                         ErrorCard(message = e.error.localizedMessage!!)
                     }
@@ -112,21 +120,6 @@ fun MovieListView(viewModel: MainViewModel) {
     }
 }
 
-//@Preview
-//@Composable
-//fun HomeScreenPrv() {
-//
-//
-//    NowPlayingAppTheme() {
-//
-//        Column(
-//            modifier = Modifier.fillMaxSize(),
-//        ) {
-//
-//        }
-//    }
-//
-//}
 
 
 

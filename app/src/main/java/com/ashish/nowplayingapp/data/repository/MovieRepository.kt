@@ -12,7 +12,7 @@ class MovieRepository @Inject constructor(private val movieApi: MovieApi){
     suspend fun getPopularMovies(pageNumber : Int) =
         movieApi.getPopularMovies(pageNumber = pageNumber)
 
-    suspend fun getMovie(id : Int) =
-        movieApi.getMovies(id)
+    suspend fun getMovie(id : Long) =
+        movieApi.getMovies(movieId = id)
 
 }

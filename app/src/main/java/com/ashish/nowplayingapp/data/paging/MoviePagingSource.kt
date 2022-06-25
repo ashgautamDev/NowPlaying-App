@@ -21,11 +21,11 @@ class MoviePagingSource(
                 prevKey = if (nextPage == 1) null else nextPage - 1,
                 nextKey = nowPlayingMovieResponse.page.plus(1)
             )
-//            LoadResult.Page(
-//                data = popularMovieResponse.results,
-//                prevKey = if (nextPage == 1) null else nextPage - 1,
-//                nextKey = popularMovieResponse.page.plus(1)
-//            )
+            LoadResult.Page(
+                data = popularMovieResponse.results,
+                prevKey = if (nextPage == 1) null else nextPage - 1,
+                nextKey = popularMovieResponse.page.plus(1)
+            )
 
         } catch (e: Exception) {
             LoadResult.Error(e)

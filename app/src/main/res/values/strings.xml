@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">NowPlaying App</string>
+    <string name="home_tagline">See the now playing movies</string>
+    <string name="greeting_title">Hey There!</string>
+    <string name="fav_tagline">The Movies you filled with love</string>
+    <string name="favscreen_title">"Your's Favourite! "</string>
 </resources>

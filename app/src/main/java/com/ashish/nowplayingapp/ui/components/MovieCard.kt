@@ -17,11 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.ui.theme.NowPlayingAppTheme
+import com.ashish.nowplayingapp.ui.theme.icons
 import com.google.accompanist.coil.rememberCoilPainter
 
 @Composable
@@ -31,7 +33,7 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
         mutableStateOf(false)
     }
 
-    var favIcon = Icons.Default.FavoriteBorder
+    var favIcon = remember { Icons.Default.FavoriteBorder }
     val context = LocalContext.current
     Card(
         modifier = Modifier
@@ -44,7 +46,7 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp, 16.dp, 0.dp, 16.dp)
         ) {
 
             val image = rememberCoilPainter(
@@ -53,7 +55,7 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
             )
             Image(
                 modifier = Modifier
-                    .size(110.dp, 130.dp)
+                    .size(110.dp, 140.dp)
                     .clip(RoundedCornerShape(16.dp)),
                 painter = image,
                 alignment = Alignment.CenterStart,
@@ -63,41 +65,48 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            Column(modifier = Modifier.align(Alignment.CenterVertically)) {
+            Column(modifier = Modifier.fillMaxHeight() , verticalArrangement = Arrangement.SpaceBetween) {
 
-                Row(verticalAlignment = Alignment.Bottom) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()) {
 
                     // Title of Movie
                     Text(
                         text = movie.original_title,
-                        modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                        modifier = Modifier.weight(3f),
                         color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.Bold,
-                        style = typography.h5
+                        style = typography.h5,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
 
                     // Heart Icon for is movie fav or not
                     IconButton(onClick = {
                         favIcon = Icons.Filled.Favorite
                         onFavClick(isFavMovie.value)
-                    }, modifier = Modifier.align(Alignment.Bottom)) {
-                        Icon(imageVector = favIcon, contentDescription = "Fav Button")
+                    }, modifier = Modifier
+                        .align(Alignment.Bottom)
+                        .weight(1f)) {
+                        Icon(imageVector = favIcon, contentDescription = "Fav Button" , tint = icons)
                     }
 
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
+//                Spacer(modifier = Modifier.height(8.dp))
 
                 RatingBarView(averageVote = movie.vote_average)
-                Spacer(modifier = Modifier.height(28.dp))
+//                Spacer(modifier = Modifier.height(28.dp))
 
                 Text(
                     text = buildString {
                         append("Popularity - ")
                         append(movie.popularity)
                     },
-                    modifier = Modifier.padding(0.dp, 0.dp, 12.dp, 0.dp),
+                    modifier = Modifier,
                     color = MaterialTheme.colors.onPrimary,
                     style = typography.body1
                 )
