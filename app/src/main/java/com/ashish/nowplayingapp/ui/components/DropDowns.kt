@@ -4,7 +4,6 @@ package com.ashish.nowplayingapp.ui.components
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -13,14 +12,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.ashish.nowplayingapp.R
 
 
 @Composable
-fun PopularityDropDown( onClick : () -> Unit) {
+fun PopularityDropDown(onAllMovieClick : () -> Unit, onPopularMovieClick : () -> Unit,) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Most Popular", "All NowPlaying")
     var selectedIndex by remember { mutableStateOf(1) }
@@ -49,7 +45,7 @@ fun PopularityDropDown( onClick : () -> Unit) {
                 }) {
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
-                    contentDescription = "Drop-Down Arrow" ,
+                    contentDescription = "Drop-Down Arrow",
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -65,7 +61,7 @@ fun PopularityDropDown( onClick : () -> Unit) {
         ) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {
-                    if (items[selectedIndex] == "Most Popular") onClick()
+                    if (items[selectedIndex] == "Most Popular") onPopularMovieClick() else onAllMovieClick()
                     selectedIndex = index
                     expanded = false
                 }) {

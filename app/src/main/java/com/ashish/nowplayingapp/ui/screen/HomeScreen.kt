@@ -1,5 +1,6 @@
 package com.ashish.nowplayingapp.ui.screen
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,7 @@ import com.ashish.nowplayingapp.ui.components.TopAppBar
 import com.ashish.nowplayingapp.ui.states.ErrorCard
 import com.ashish.nowplayingapp.ui.states.LoadingItem
 import com.ashish.nowplayingapp.ui.states.LoadingView
+import com.ashish.nowplayingapp.utils.ListState
 import com.ashish.nowplayingapp.utils.MovieState
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
 
@@ -29,14 +31,6 @@ const val TAG = "Home"
 
 @Composable
 fun HomeScreen(viewModel: MainViewModel , navController: NavController) {
-    var popularIndex by remember { mutableStateOf(1) }
-
-
-//    if (indexFilter == 0) {
-//        Log.d(TAG, "MovieListView: we are showing Most Popular Movies ")
-//    } else {
-//        Log.d(TAG, "MovieListView: We are showing the normal playing movies")
-//    }
 
     Scaffold(
         topBar = {
@@ -57,7 +51,16 @@ fun MovieListView(viewModel: MainViewModel) {
     val lazyMovieItems = viewModel.nowPlayingMovies.collectAsLazyPagingItems()
     val lazyPopularMovieItems = viewModel.popularMovies.collectAsLazyPagingItems()
 
-    val movieItems = if (!viewModel.movieState.value) lazyMovieItems else lazyPopularMovieItems
+    var query = remember {
+        mutableStateOf(ListState.ALL_PLAYING.string)
+    }
+    val movieItems = remember {
+        viewModel.moviesData(query.value)
+    }.collectAsLazyPagingItems()
+
+
+
+//    val movieItems = if (!viewModel.movieState.value) lazyMovieItems else lazyPopularMovieItems
 
 
     LazyColumn {
@@ -69,9 +72,24 @@ fun MovieListView(viewModel: MainViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
         ) {
-            PopularityDropDown(){
-                viewModel.setListToPopular()
-            }
+            PopularityDropDown(
+                onAllMovieClick = {
+                    Log.d(TAG, "On All Movie Clicked")
+                    Log.d(TAG, "On All Movie Clicked ${ListState.ALL_PLAYING.string}")
+                    viewModel.setListToAllNowPlaying()
+                    Log.d(TAG, "On All Movie Clicked with ${viewModel.movieState.value}")
+
+                } ,
+                onPopularMovieClick = {
+                    Log.d(TAG, "On Popular Movie Clicked ${ListState.POPULAR_PLAYING.string}")
+                  query = mutableStateOf( ListState.POPULAR_PLAYING.string)
+
+                    viewModel.setListToPopular()
+                        Log.d(TAG, "On All Movie Clicked with ${viewModel.movieState.value}")
+
+                }
+
+            )
             } }
         items(movieItems) { item ->
 

@@ -1,6 +1,5 @@
 package com.ashish.nowplayingapp.viewmodel
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import com.ashish.nowplayingapp.data.repository.MovieRepository
 import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
+import com.ashish.nowplayingapp.utils.ListState
 import com.ashish.nowplayingapp.utils.MovieState
 import com.ashish.nowplayingapp.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +29,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Backing property to avoid state updates from other classes
-    private val _nowPlayingState = MutableStateFlow<ViewState>(ViewState.Loading)
+    private val _nowPlayingState = MutableStateFlow<MovieState>(MovieState.Loading)
     private val _favState = MutableStateFlow<FavViewState>(FavViewState.Loading)
 
     // UI collects from this StateFlow to get it"s state update
@@ -40,17 +40,27 @@ class MainViewModel @Inject constructor(
     private var _movieState = mutableStateOf(false)
     val movieState = _movieState
 
+   private val query = if (_movieState.value) ListState.POPULAR_PLAYING else ListState.ALL_PLAYING
+
     val nowPlayingMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
-        MoviePagingSource(movieRepository)
+        MoviePagingSource(movieRepository ,query.string )
     }.flow
 
     val popularMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
-        MoviePagingSource(movieRepository)
+        MoviePagingSource(movieRepository, query.string)
     }.flow
+
+
+    val moviesData:(String) -> Flow<PagingData<Movie>> = {
+        Pager(PagingConfig(pageSize = 10)) {
+            MoviePagingSource(movieRepository, it)
+        }.flow
+    }
 
 
     // get all movies id from Room Database
     init {
+
 
         viewModelScope.launch {
             favMovieRepository.getAllFavouritesMovies().collect() { result ->
@@ -84,6 +94,9 @@ class MainViewModel @Inject constructor(
 
     fun setListToPopular(){
         _movieState.value = true
+    }
+    fun setListToAllNowPlaying(){
+        _movieState.value = false
     }
 
 }

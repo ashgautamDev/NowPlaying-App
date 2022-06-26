@@ -8,7 +8,8 @@ import com.ashish.nowplayingapp.model.MovieResponse
 import javax.inject.Inject
 
 class MoviePagingSource(
-    private val movieRepository: MovieRepository
+    private val movieRepository: MovieRepository,
+    private val query : String
 ) : PagingSource<Int , Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
@@ -16,13 +17,10 @@ class MoviePagingSource(
             val nextPage = params.key ?: 1
             val nowPlayingMovieResponse = movieRepository.getNowPlayingMovies(nextPage)
             val popularMovieResponse = movieRepository.getPopularMovies(nextPage)
+            val movieResponse = movieRepository.getMovies(nextPage , query = query)
+
             LoadResult.Page(
-                data = nowPlayingMovieResponse.results,
-                prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = nowPlayingMovieResponse.page.plus(1)
-            )
-            LoadResult.Page(
-                data = popularMovieResponse.results,
+                data = movieResponse.results,
                 prevKey = if (nextPage == 1) null else nextPage - 1,
                 nextKey = popularMovieResponse.page.plus(1)
             )

@@ -24,3 +24,9 @@ sealed class MovieState {
     data class Common(val movies: Flow<PagingData<Movie>>) : MovieState()
 
 }
+
+enum class ListState(val string : String) {
+    POPULAR_PLAYING("popular"),
+    ALL_PLAYING("now_playing")
+
+}
