@@ -34,7 +34,7 @@ class FavMoviesDatabaseTest {
     }
 
     @Test
-    fun insert_and_read_fav_movies() = runBlocking {
+    fun insertWrite() = runBlocking {
         val favMovie = FavMovie(23443L)
         favDao.insertFavMovie(favMovie)
         var movie : String? = null

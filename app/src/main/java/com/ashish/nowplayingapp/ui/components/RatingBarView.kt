@@ -37,7 +37,7 @@ fun RatingBarView(averageVote: Float) {
         Spacer(modifier = Modifier.width(16.dp))
 
         CustomRatingBar(
-            value = rating,
+            value = rating/2,
             config = RatingBarConfig().style(RatingBarStyle.HighLighted)
         )
     }

@@ -96,9 +96,10 @@ fun MovieListView(viewModel: MainViewModel) {
 
                 if (it) {
                     viewModel.addFavMovie(favMovie)
+//                    val movie = viewModel.getMovieFromId(favMovie.id)
                     Log.d(
                         TAG,
-                        "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite "
+                        "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite"
                     )
                 } else {
                     viewModel.deleteFavMovie(favMovie)

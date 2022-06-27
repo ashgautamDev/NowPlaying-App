@@ -1,5 +1,8 @@
 package com.ashish.nowplayingapp.ui.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,38 +25,44 @@ import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.ui.theme.NowPlayingAppTheme
+import com.ashish.nowplayingapp.ui.theme.accent
 import com.ashish.nowplayingapp.ui.theme.icons
 import com.google.accompanist.coil.rememberCoilPainter
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
 
-    var isFavMovie by remember {
+    var isFavMovie by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+    var isExpanded by remember {
         mutableStateOf(false)
     }
-
-//    var favIcon = remember {
-//        Icons.Default.FavoriteBorder
-//    }
-
-    val context = LocalContext.current
-
-//    LaunchedEffect(key1 = isFavMovie ){
-//      favIcon =  if (isFavMovie) Icons.Filled.Favorite else Icons.Default.FavoriteBorder
-//
-//    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .animateContentSize(
+                animationSpec = tween(
+                    durationMillis = 300,
+                    easing = LinearOutSlowInEasing
+                )
+            )
             .padding(8.dp)
             .clip(MaterialTheme.shapes.large),
         elevation = 0.dp,
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = MaterialTheme.colors.primary ,
+        onClick = {
+            isExpanded = !isExpanded
+        }
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 16.dp, 0.dp, 16.dp)
+
+        Column( modifier = Modifier
+        .fillMaxWidth()) {
+
+
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 16.dp, 0.dp, 16.dp)
         ) {
 
             val image = rememberCoilPainter(
@@ -100,7 +109,7 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
                         }
                     ) {
                         Icon(
-                            tint = icons,
+                            tint = accent.copy(alpha = .7f),
 
                             imageVector = if (isFavMovie) {
                                 Icons.Filled.Favorite
@@ -132,10 +141,32 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
             }
 
         }
+
+        if (isExpanded){
+            Text(
+                text = movie.original_title,
+                modifier = Modifier.padding(horizontal = 16.dp),
+                color = MaterialTheme.colors.onPrimary,
+                fontWeight = FontWeight.Bold,
+                style = typography.h5,
+
+                )
+            Text(
+                text = buildString {
+                    append("Overview -")
+                    append(movie.overview)
+                },
+                modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp),
+                color = MaterialTheme.colors.onPrimary,
+                style = typography.body1
+            )
+        }
+
+
     }
 
 
-}
+}}
 
 @Preview
 @Composable

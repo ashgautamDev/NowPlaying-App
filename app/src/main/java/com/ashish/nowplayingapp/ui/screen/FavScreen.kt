@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.navigation.NavController
 import com.ashish.nowplayingapp.R
 import com.ashish.nowplayingapp.model.FavMovie
+import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.ui.components.MovieCard
 import com.ashish.nowplayingapp.ui.components.TopAppBar
 import com.ashish.nowplayingapp.ui.states.EmptyListCard
@@ -22,14 +23,6 @@ const val T = "Fav"
 
 @Composable
 fun FavScreen(viewModel: MainViewModel , navController: NavController) {
-    var indexFilter by remember { mutableStateOf(1) }
-    var indexList by remember { mutableStateOf(1) }
-
-//    if (indexFilter == 0) {
-//        Log.d(TAG, "MovieListView: we are showing Most Popular Movies ")
-//    } else {
-//        Log.d(TAG, "MovieListView: We are showing the normal playing movies")
-//    }
 
     Scaffold(
 
@@ -43,21 +36,23 @@ fun FavScreen(viewModel: MainViewModel , navController: NavController) {
 
     ) {
         when(val result = viewModel.favState.collectAsState().value){
-            is FavViewState.Success ->{
-                FavMoviesList(moviesIdList = result.movies , viewModel)
-            }
+            FavViewState.Loading -> {
+            LoadingItem()
+        }
+
             FavViewState.Empty -> {
                 EmptyListCard {
                     navController.navigate("home")
                 }
             }
+            is FavViewState.Success ->{
+            FavMoviesList(moviesIdList = result.movies , viewModel)
+        }
 
             is FavViewState.Error -> {
                 ErrorCard(message = result.exception.localizedMessage!!)
             }
-            FavViewState.Loading -> {
-                LoadingItem()
-            }
+
         }
 
     }
@@ -69,10 +64,11 @@ fun FavScreen(viewModel: MainViewModel , navController: NavController) {
 fun FavMoviesList(moviesIdList : List<FavMovie> , viewModel: MainViewModel) {
 
     LazyColumn(){
-        items(moviesIdList){
-//            MovieCard(movie = movie.,){
-//
-//            }
+        items(moviesIdList){ movie ->
+val getMovie = viewModel.getMovieFromId(movieId = movie.id)
+            MovieCard(movie = Movie.sampleMovie()){
+                viewModel.deleteFavMovie(FavMovie(movie.id))
+            }
         }
     }
 

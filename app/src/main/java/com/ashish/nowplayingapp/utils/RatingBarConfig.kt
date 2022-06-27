@@ -18,7 +18,7 @@ class RatingBarConfig {
         private set
     var isIndicator: Boolean = false
         private set
-    var activeColor: Color = Color.Green
+    var activeColor: Color = Color.Green.copy(alpha = 0.8f)
         private set
     var inactiveColor: Color = accent.copy(alpha = 0.5f)
         private set

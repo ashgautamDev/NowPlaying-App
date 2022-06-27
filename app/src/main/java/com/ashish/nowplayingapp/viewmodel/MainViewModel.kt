@@ -72,7 +72,9 @@ class MainViewModel @Inject constructor(
         favMovieRepository.deleteFavMovie(movie)
     }
 
-//    fun getMovieFromId(favMovie: FavMovie) = getMovie(favMovie)
+    fun getMovieFromId(movieId: Long) = viewModelScope.launch {
+     movieRepository.getMovie(movieId)
+    }
 
 
 }
