@@ -4,7 +4,10 @@ import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -18,10 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.ashish.nowplayingapp.R
-import com.ashish.nowplayingapp.ui.theme.NowPlayingAppTheme
 import com.ashish.nowplayingapp.ui.theme.Typography
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -51,7 +52,7 @@ fun SplashScreen(navController: NavHostController) {
             delay(2000L)
 
             navController.navigate("home") {
-                this.launchSingleTop
+                launchSingleTop = false
             }
         }
 
@@ -61,19 +62,20 @@ fun SplashScreen(navController: NavHostController) {
     ) {
         Image(
             painterResource(id = R.drawable.splash_background), contentDescription = null,
-            modifier = Modifier.fillMaxSize() , contentScale = ContentScale.FillHeight
+            modifier = Modifier.fillMaxSize(), contentScale = ContentScale.FillHeight
         )
-        Column(Modifier.fillMaxSize() , verticalArrangement = Arrangement.Center) {
+        Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
             Text(
-            text = "NOW PLAYING \n APP", color = MaterialTheme.colors.primary,
-            fontWeight = FontWeight.Bold,
+                text = "NOW PLAYING \n APP", color = MaterialTheme.colors.primary,
+                fontWeight = FontWeight.Bold,
                 textDecoration = TextDecoration.None,
-            style = Typography.h4,
+                style = Typography.h4,
                 textAlign = TextAlign.Center,
-            modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth()
-            ,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(),
 
-        )
+                )
         }
 
     }

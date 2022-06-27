@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 
 
 @Composable
-fun PopularityDropDown(onAllMovieClick : () -> Unit, onPopularMovieClick : () -> Unit,) {
+fun PopularityDropDown(onAllMovieClick: () -> Unit, onPopularMovieClick: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Most Popular", "All NowPlaying")
     var selectedIndex by remember { mutableStateOf(1) }
@@ -61,8 +61,8 @@ fun PopularityDropDown(onAllMovieClick : () -> Unit, onPopularMovieClick : () ->
         ) {
             items.forEachIndexed { index, s ->
                 DropdownMenuItem(onClick = {
-                    if (items[selectedIndex] == "Most Popular") onPopularMovieClick() else onAllMovieClick()
                     selectedIndex = index
+                    if (items[selectedIndex] == "Most Popular") onPopularMovieClick() else onAllMovieClick()
                     expanded = false
                 }) {
                     Text(text = s, color = MaterialTheme.colors.onPrimary)

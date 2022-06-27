@@ -12,7 +12,6 @@ import com.ashish.nowplayingapp.data.repository.MovieRepository
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
 import com.ashish.nowplayingapp.utils.ListState
-import com.ashish.nowplayingapp.utils.MovieState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,15 +27,17 @@ class MainViewModel @Inject constructor(
 
     // Backing property to avoid state updates from other classes
     private val _favState = MutableStateFlow<FavViewState>(FavViewState.Loading)
-    private val _movieState = MutableStateFlow<MovieState>(MovieState.Loading)
 
     // UI collects from this StateFlow to get it"s state update
     val favState = _favState.asStateFlow()
-    val movieState = _movieState.asStateFlow()
 
     val query = mutableStateOf(
         ListState.ALL_PLAYING.string
     )
+
+    fun isMovieFav(id: Long) = viewModelScope.launch {
+        favMovieRepository.isMovieFav(id)
+    }
 
     val moviesData: Flow<PagingData<Movie>> =
         Pager(PagingConfig(pageSize = 10)) {

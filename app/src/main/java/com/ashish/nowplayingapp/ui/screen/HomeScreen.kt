@@ -30,7 +30,6 @@ import com.ashish.nowplayingapp.ui.states.NoInternetCard
 import com.ashish.nowplayingapp.utils.ListState
 import com.ashish.nowplayingapp.utils.isInternetAvailable
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
-import kotlinx.coroutines.ensureActive
 
 const val TAG = "Home"
 
@@ -38,10 +37,13 @@ const val TAG = "Home"
 fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
     val context = LocalContext.current
 
-    var networkAvailable by remember{ mutableStateOf( isInternetAvailable(context)) }
+    var networkAvailable by remember { mutableStateOf(isInternetAvailable(context)) }
 
-    LaunchedEffect(key1 = networkAvailable){
-        if (networkAvailable) Log.d(TAG, "HomeScreen: Network is available") else Log.d(TAG, "HomeScreen: Network is unavailable")
+    LaunchedEffect(key1 = networkAvailable) {
+        if (networkAvailable) Log.d(TAG, "HomeScreen: Network is available") else Log.d(
+            TAG,
+            "HomeScreen: Network is unavailable"
+        )
 
     }
     Scaffold(
@@ -51,7 +53,9 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
                 R.string.greeting_title,
                 icon = Icons.Filled.Favorite
             ) {
-                navController.navigate("fav")
+                navController.navigate("fav") {
+                    launchSingleTop = true
+                }
             }
         }
     ) {
@@ -61,11 +65,13 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
             NoInternetCard(onRetry = {
                 Toast.makeText(context, "Please check you data connection", Toast.LENGTH_LONG)
                     .show()
-                    networkAvailable = isInternetAvailable(context)
+                networkAvailable = isInternetAvailable(context)
             }) {
                 navController.navigate(
                     "fav"
-                )
+                ) {
+                    popUpTo("home")
+                }
             }
         }
     }
@@ -77,9 +83,11 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
 fun MovieListView(viewModel: MainViewModel) {
 
     val movieItems = viewModel.moviesData.collectAsLazyPagingItems()
-
+    val context = LocalContext.current
     LaunchedEffect(key1 = viewModel.query.value) {
         Log.d(TAG, "On Launched effect ${viewModel.query.value}")
+        val message = viewModel.query.value
+        Toast.makeText(context, "Loading ${message.uppercase()} Movies", Toast.LENGTH_SHORT).show()
         movieItems.refresh()
     }
 

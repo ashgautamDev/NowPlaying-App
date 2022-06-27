@@ -17,8 +17,8 @@ import dagger.hilt.android.internal.lifecycle.HiltViewModelFactory
 fun NavGraph(viewModel: MainViewModel) {
 
     val navController = rememberNavController()
-//TODO("Change it after code works")
-    NavHost(navController = navController, startDestination = "home") {
+
+    NavHost(navController = navController, startDestination = "splash") {
         composable("splash") {
           SplashScreen(navController)
         }

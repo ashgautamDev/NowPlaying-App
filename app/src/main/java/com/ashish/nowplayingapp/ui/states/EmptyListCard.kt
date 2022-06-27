@@ -21,7 +21,7 @@ import com.ashish.nowplayingapp.ui.theme.NowPlayingAppTheme
 import com.ashish.nowplayingapp.ui.theme.Typography
 
 @Composable
-fun EmptyListCard(goToNowPlaying : () -> Unit) {
+fun EmptyListCard(goToNowPlaying: () -> Unit) {
 
     val isPlaying by remember {
         mutableStateOf(true)
@@ -56,7 +56,9 @@ fun EmptyListCard(goToNowPlaying : () -> Unit) {
     ) {
 
         LottieAnimation(
-            modifier = Modifier.size(200.dp).padding(bottom = 8.dp),
+            modifier = Modifier
+                .size(200.dp)
+                .padding(bottom = 8.dp),
             composition = composition,
             progress = progress
         )
@@ -74,8 +76,10 @@ fun EmptyListCard(goToNowPlaying : () -> Unit) {
             style = MaterialTheme.typography.h6
         )
         Button(
-            onClick = {goToNowPlaying() },
-            modifier = Modifier.shadow(0.dp, MaterialTheme.shapes.medium).padding(top = 16.dp)
+            onClick = { goToNowPlaying() },
+            modifier = Modifier
+                .shadow(0.dp, MaterialTheme.shapes.medium)
+                .padding(top = 16.dp)
         ) {
             Text(text = "Try Now", style = Typography.button)
         }

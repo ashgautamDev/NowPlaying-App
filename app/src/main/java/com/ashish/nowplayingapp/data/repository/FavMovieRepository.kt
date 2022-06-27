@@ -14,6 +14,8 @@ class FavMovieRepository @Inject constructor(private val favMovieDao: FavMovieDa
     fun getAllFavouritesMovies() : Flow<List<Movie>> =
         favMovieDao.getAllFavouritesMovies().flowOn(Dispatchers.IO).conflate()
 
+    suspend fun isMovieFav(id : Long) = favMovieDao.isMovieFav(id)
+
     suspend fun insertFavMovie(movie: Movie) = favMovieDao.insertFavMovie(movie)
 
     suspend fun deleteFavMovie(movie: Movie) = favMovieDao.deleteFavMovie(movie)

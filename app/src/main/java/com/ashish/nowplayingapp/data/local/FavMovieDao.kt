@@ -11,6 +11,9 @@ interface FavMovieDao {
     @Query("SELECT * FROM fav_movie")
     fun getAllFavouritesMovies() : Flow<List<Movie>>
 
+    @Query("SELECT EXISTS (SELECT 1 FROM fav_movie WHERE id = :id)")
+    suspend fun isMovieFav(id : Long) : Boolean
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavMovie(movie: Movie)
 
