@@ -3,14 +3,12 @@ package com.ashish.nowplayingapp.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.ashish.nowplayingapp.data.paging.MoviePagingSource
 import com.ashish.nowplayingapp.data.repository.FavMovieRepository
 import com.ashish.nowplayingapp.data.repository.MovieRepository
-import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
 import com.ashish.nowplayingapp.utils.ListState
@@ -60,19 +58,8 @@ class MainViewModel @Inject constructor(
         }
 
 
-
     }
 
-//    fun getMovie(id: Long) = viewModelScope.launch {
-//        favMovieRepository.getAllFavouritesMovies().collect(){result->
-//            if (result.isNullOrEmpty()){
-//     _movieState.value =  MovieState.Empty
-//            }
-//            else{
-//                _movieState.value = MovieState.Success(result.contains(viewModel))
-//            }
-//        }
-//    }
 
     // add to favourites by taking id
     fun addFavMovie(movie: Movie) = viewModelScope.launch {
@@ -85,7 +72,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getMovieFromId(movieId: Long) = viewModelScope.launch {
-     movieRepository.getMovie(movieId)
+        movieRepository.getMovie(movieId)
     }
 
 

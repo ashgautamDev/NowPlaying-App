@@ -1,6 +1,7 @@
 package com.ashish.nowplayingapp.ui.screen
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,31 +10,40 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.ashish.nowplayingapp.R
-import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.ui.components.MovieCard
 import com.ashish.nowplayingapp.ui.components.PopularityDropDown
 import com.ashish.nowplayingapp.ui.components.TopAppBar
 import com.ashish.nowplayingapp.ui.states.ErrorCard
 import com.ashish.nowplayingapp.ui.states.LoadingItem
 import com.ashish.nowplayingapp.ui.states.LoadingView
+import com.ashish.nowplayingapp.ui.states.NoInternetCard
 import com.ashish.nowplayingapp.utils.ListState
+import com.ashish.nowplayingapp.utils.isInternetAvailable
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
+import kotlinx.coroutines.ensureActive
 
 const val TAG = "Home"
 
 @Composable
 fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
+    val context = LocalContext.current
 
+    var networkAvailable by remember{ mutableStateOf( isInternetAvailable(context)) }
+
+    LaunchedEffect(key1 = networkAvailable){
+        if (networkAvailable) Log.d(TAG, "HomeScreen: Network is available") else Log.d(TAG, "HomeScreen: Network is unavailable")
+
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -45,7 +55,19 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
             }
         }
     ) {
-        MovieListView(viewModel = viewModel)
+        if (isInternetAvailable(context)) {
+            MovieListView(viewModel = viewModel)
+        } else {
+            NoInternetCard(onRetry = {
+                Toast.makeText(context, "Please check you data connection", Toast.LENGTH_LONG)
+                    .show()
+                    networkAvailable = isInternetAvailable(context)
+            }) {
+                navController.navigate(
+                    "fav"
+                )
+            }
+        }
     }
 
 
