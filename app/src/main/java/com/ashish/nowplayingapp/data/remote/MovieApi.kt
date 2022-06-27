@@ -31,8 +31,8 @@ interface MovieApi {
 
     @GET("3/movie/{id}?")
     suspend fun getMovieFromId(
-        @Query("api_key") apiKey: String = API_KEY,
-        @Path("id") movieId : Long
+        @Path("id") movieId : Long,
+        @Query("api_key") apiKey: String = API_KEY
     ) : Movie
 
 }

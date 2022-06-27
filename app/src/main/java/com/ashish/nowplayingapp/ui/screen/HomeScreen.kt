@@ -1,13 +1,16 @@
 package com.ashish.nowplayingapp.ui.screen
 
-import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -24,17 +27,20 @@ import com.ashish.nowplayingapp.ui.states.ErrorCard
 import com.ashish.nowplayingapp.ui.states.LoadingItem
 import com.ashish.nowplayingapp.ui.states.LoadingView
 import com.ashish.nowplayingapp.utils.ListState
-import com.ashish.nowplayingapp.utils.MovieState
 import com.ashish.nowplayingapp.viewmodel.MainViewModel
 
 const val TAG = "Home"
 
 @Composable
-fun HomeScreen(viewModel: MainViewModel , navController: NavController) {
+fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
 
     Scaffold(
         topBar = {
-            TopAppBar(R.string.home_tagline ,R.string.greeting_title, icon = Icons.Filled.Favorite){
+            TopAppBar(
+                R.string.home_tagline,
+                R.string.greeting_title,
+                icon = Icons.Filled.Favorite
+            ) {
                 navController.navigate("fav")
             }
         }
@@ -48,62 +54,59 @@ fun HomeScreen(viewModel: MainViewModel , navController: NavController) {
 @Composable
 fun MovieListView(viewModel: MainViewModel) {
 
-    val lazyMovieItems = viewModel.nowPlayingMovies.collectAsLazyPagingItems()
-    val lazyPopularMovieItems = viewModel.popularMovies.collectAsLazyPagingItems()
+    val movieItems = viewModel.moviesData.collectAsLazyPagingItems()
 
-    var query = remember {
-        mutableStateOf(ListState.ALL_PLAYING.string)
+    LaunchedEffect(key1 = viewModel.query.value) {
+        Log.d(TAG, "On Launched effect ${viewModel.query.value}")
+        movieItems.refresh()
     }
-    val movieItems = remember {
-        viewModel.moviesData(query.value)
-    }.collectAsLazyPagingItems()
-
-
-
-//    val movieItems = if (!viewModel.movieState.value) lazyMovieItems else lazyPopularMovieItems
-
 
     LazyColumn {
         item {
             Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp, 0.dp, 16.dp, 0.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp, 0.dp, 16.dp, 0.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-        ) {
-            PopularityDropDown(
-                onAllMovieClick = {
-                    Log.d(TAG, "On All Movie Clicked")
-                    Log.d(TAG, "On All Movie Clicked ${ListState.ALL_PLAYING.string}")
-                    viewModel.setListToAllNowPlaying()
-                    Log.d(TAG, "On All Movie Clicked with ${viewModel.movieState.value}")
+            ) {
+                PopularityDropDown(
+                    onAllMovieClick = {
+                        viewModel.query.value = ListState.ALL_PLAYING.string
+                        Log.d(TAG, "On All Movie Clicked")
+                        Log.d(TAG, "On All Movie Clicked ${ListState.ALL_PLAYING.string}")
+                    },
+                    onPopularMovieClick = {
+                        viewModel.query.value = ListState.POPULAR_PLAYING.string
+                        Log.d(TAG, "On Popular Movie Clicked")
+                        Log.d(TAG, "On Popular Movie Clicked ${ListState.POPULAR_PLAYING.string}")
+                    }
 
-                } ,
-                onPopularMovieClick = {
-                    Log.d(TAG, "On Popular Movie Clicked ${ListState.POPULAR_PLAYING.string}")
-                  query = mutableStateOf( ListState.POPULAR_PLAYING.string)
+                )
+            }
+        }
 
-                    viewModel.setListToPopular()
-                        Log.d(TAG, "On All Movie Clicked with ${viewModel.movieState.value}")
-
-                }
-
-            )
-            } }
         items(movieItems) { item ->
 
             MovieCard(movie = item!!) {
                 //For Now just save on first click to db
                 val favMovie = FavMovie(item.id)
-                viewModel.addFavMovie(favMovie)
+
+                Log.d(TAG, " it value is $it")
+
                 if (it) {
+                    viewModel.addFavMovie(favMovie)
                     Log.d(
                         TAG,
                         "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite "
                     )
-
-                }else Log.d(TAG, "MovieListView: ${item.original_title} with id ${item.id} It is Not favorite ")
+                } else {
+                    viewModel.deleteFavMovie(favMovie)
+                    Log.d(
+                        TAG,
+                        "MovieListView: ${item.original_title} with id ${item.id} It is Not favorite "
+                    )
+                }
             }
 
 

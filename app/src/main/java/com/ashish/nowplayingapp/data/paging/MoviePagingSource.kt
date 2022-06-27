@@ -4,25 +4,22 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.ashish.nowplayingapp.data.repository.MovieRepository
 import com.ashish.nowplayingapp.model.Movie
-import com.ashish.nowplayingapp.model.MovieResponse
-import javax.inject.Inject
 
 class MoviePagingSource(
     private val movieRepository: MovieRepository,
-    private val query : String
-) : PagingSource<Int , Movie>() {
+    private val query: String
+) : PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
         return try {
             val nextPage = params.key ?: 1
-            val nowPlayingMovieResponse = movieRepository.getNowPlayingMovies(nextPage)
-            val popularMovieResponse = movieRepository.getPopularMovies(nextPage)
-            val movieResponse = movieRepository.getMovies(nextPage , query = query)
+
+            val movieResponse = movieRepository.getMovies(nextPage, query = query)
 
             LoadResult.Page(
                 data = movieResponse.results,
                 prevKey = if (nextPage == 1) null else nextPage - 1,
-                nextKey = popularMovieResponse.page.plus(1)
+                nextKey = movieResponse.page.plus(1)
             )
 
         } catch (e: Exception) {
@@ -31,7 +28,7 @@ class MoviePagingSource(
     }
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
-        TODO("Not yet implemented")
+        return 1
     }
 
 

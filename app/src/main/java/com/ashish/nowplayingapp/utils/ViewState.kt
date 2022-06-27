@@ -16,14 +16,6 @@ sealed class ViewState {
     data class Error(val exception: Throwable) : ViewState()
 
 }
-sealed class MovieState {
-
-
-    object Loading : MovieState()
-    data class Popular(val movies: Flow<PagingData<Movie>>) : MovieState()
-    data class Common(val movies: Flow<PagingData<Movie>>) : MovieState()
-
-}
 
 enum class ListState(val string : String) {
     POPULAR_PLAYING("popular"),

@@ -13,8 +13,6 @@ import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
 import com.ashish.nowplayingapp.utils.ListState
-import com.ashish.nowplayingapp.utils.MovieState
-import com.ashish.nowplayingapp.utils.ViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,39 +27,23 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     // Backing property to avoid state updates from other classes
-    private val _nowPlayingState = MutableStateFlow<MovieState>(MovieState.Loading)
     private val _favState = MutableStateFlow<FavViewState>(FavViewState.Loading)
 
     // UI collects from this StateFlow to get it"s state update
-    val nowPlayingState = _nowPlayingState.asStateFlow()
     val favState = _favState.asStateFlow()
 
+    val query = mutableStateOf(
+        ListState.ALL_PLAYING.string
+    )
 
-    private var _movieState = mutableStateOf(false)
-    val movieState = _movieState
-
-   private val query = if (_movieState.value) ListState.POPULAR_PLAYING else ListState.ALL_PLAYING
-
-    val nowPlayingMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
-        MoviePagingSource(movieRepository ,query.string )
-    }.flow
-
-    val popularMovies: Flow<PagingData<Movie>> = Pager(PagingConfig(pageSize = 10)) {
-        MoviePagingSource(movieRepository, query.string)
-    }.flow
-
-
-    val moviesData:(String) -> Flow<PagingData<Movie>> = {
+    val moviesData: Flow<PagingData<Movie>> =
         Pager(PagingConfig(pageSize = 10)) {
-            MoviePagingSource(movieRepository, it)
+            MoviePagingSource(movieRepository, query.value)
         }.flow
-    }
 
 
     // get all movies id from Room Database
     init {
-
-
         viewModelScope.launch {
             favMovieRepository.getAllFavouritesMovies().collect() { result ->
                 if (result.isNullOrEmpty()) {
@@ -92,11 +74,5 @@ class MainViewModel @Inject constructor(
 
 //    fun getMovieFromId(favMovie: FavMovie) = getMovie(favMovie)
 
-    fun setListToPopular(){
-        _movieState.value = true
-    }
-    fun setListToAllNowPlaying(){
-        _movieState.value = false
-    }
 
 }

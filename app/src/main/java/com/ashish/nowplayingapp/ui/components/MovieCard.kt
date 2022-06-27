@@ -8,12 +8,11 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -29,12 +28,20 @@ import com.google.accompanist.coil.rememberCoilPainter
 @Composable
 fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
 
-    val isFavMovie = remember {
+    var isFavMovie by remember {
         mutableStateOf(false)
     }
 
-    var favIcon = remember { Icons.Default.FavoriteBorder }
+//    var favIcon = remember {
+//        Icons.Default.FavoriteBorder
+//    }
+
     val context = LocalContext.current
+
+//    LaunchedEffect(key1 = isFavMovie ){
+//      favIcon =  if (isFavMovie) Icons.Filled.Favorite else Icons.Default.FavoriteBorder
+//
+//    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,13 +92,23 @@ fun MovieCard(movie: Movie, onFavClick: (Boolean) -> Unit) {
                     )
 
                     // Heart Icon for is movie fav or not
-                    IconButton(onClick = {
-                        favIcon = Icons.Filled.Favorite
-                        onFavClick(isFavMovie.value)
-                    }, modifier = Modifier
-                        .align(Alignment.Bottom)
-                        .weight(1f)) {
-                        Icon(imageVector = favIcon, contentDescription = "Fav Button" , tint = icons)
+                    IconToggleButton(
+                        checked = isFavMovie,
+                        onCheckedChange = {
+                            isFavMovie = !isFavMovie
+                            onFavClick(isFavMovie)
+                        }
+                    ) {
+                        Icon(
+                            tint = icons,
+
+                            imageVector = if (isFavMovie) {
+                                Icons.Filled.Favorite
+                            } else {
+                                Icons.Default.FavoriteBorder
+                            },
+                            contentDescription = null
+                        )
                     }
 
                 }
