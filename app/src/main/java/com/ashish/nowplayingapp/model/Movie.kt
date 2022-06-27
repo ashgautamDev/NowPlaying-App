@@ -1,7 +1,12 @@
 package com.ashish.nowplayingapp.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+
+@Entity(tableName = "fav_movie")
 data class Movie(
+    @PrimaryKey
     val id: Long,
     val backdrop_path: String,
     val original_title: String,

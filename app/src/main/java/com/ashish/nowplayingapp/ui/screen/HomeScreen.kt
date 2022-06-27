@@ -90,19 +90,18 @@ fun MovieListView(viewModel: MainViewModel) {
 
             MovieCard(movie = item!!) {
                 //For Now just save on first click to db
-                val favMovie = FavMovie(item.id)
 
                 Log.d(TAG, " it value is $it")
 
                 if (it) {
-                    viewModel.addFavMovie(favMovie)
+                    viewModel.addFavMovie(item)
 //                    val movie = viewModel.getMovieFromId(favMovie.id)
                     Log.d(
                         TAG,
                         "MovieListView: The movie ${item.original_title} with id ${item.id} is Favourite"
                     )
                 } else {
-                    viewModel.deleteFavMovie(favMovie)
+                    viewModel.deleteFavMovie(item)
                     Log.d(
                         TAG,
                         "MovieListView: ${item.original_title} with id ${item.id} It is Not favorite "

@@ -61,13 +61,13 @@ fun FavScreen(viewModel: MainViewModel , navController: NavController) {
 }
 
 @Composable
-fun FavMoviesList(moviesIdList : List<FavMovie> , viewModel: MainViewModel) {
+fun FavMoviesList(moviesIdList : List<Movie> , viewModel: MainViewModel) {
 
     LazyColumn(){
         items(moviesIdList){ movie ->
-val getMovie = viewModel.getMovieFromId(movieId = movie.id)
-            MovieCard(movie = Movie.sampleMovie()){
-                viewModel.deleteFavMovie(FavMovie(movie.id))
+
+            MovieCard(movie = movie){
+                viewModel.deleteFavMovie(movie)
             }
         }
     }

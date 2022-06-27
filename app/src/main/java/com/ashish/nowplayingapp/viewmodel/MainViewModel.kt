@@ -3,6 +3,7 @@ package com.ashish.nowplayingapp.viewmodel
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -13,6 +14,7 @@ import com.ashish.nowplayingapp.model.FavMovie
 import com.ashish.nowplayingapp.model.Movie
 import com.ashish.nowplayingapp.utils.FavViewState
 import com.ashish.nowplayingapp.utils.ListState
+import com.ashish.nowplayingapp.utils.MovieState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,9 +30,11 @@ class MainViewModel @Inject constructor(
 
     // Backing property to avoid state updates from other classes
     private val _favState = MutableStateFlow<FavViewState>(FavViewState.Loading)
+    private val _movieState = MutableStateFlow<MovieState>(MovieState.Loading)
 
     // UI collects from this StateFlow to get it"s state update
     val favState = _favState.asStateFlow()
+    val movieState = _movieState.asStateFlow()
 
     val query = mutableStateOf(
         ListState.ALL_PLAYING.string
@@ -56,19 +60,27 @@ class MainViewModel @Inject constructor(
         }
 
 
+
     }
 
-    fun getMovie(id: Long) = viewModelScope.launch {
-        movieRepository.getMovie(id)
-    }
+//    fun getMovie(id: Long) = viewModelScope.launch {
+//        favMovieRepository.getAllFavouritesMovies().collect(){result->
+//            if (result.isNullOrEmpty()){
+//     _movieState.value =  MovieState.Empty
+//            }
+//            else{
+//                _movieState.value = MovieState.Success(result.contains(viewModel))
+//            }
+//        }
+//    }
 
     // add to favourites by taking id
-    fun addFavMovie(movie: FavMovie) = viewModelScope.launch {
+    fun addFavMovie(movie: Movie) = viewModelScope.launch {
         favMovieRepository.insertFavMovie(movie)
     }
 
     // deleting from db
-    fun deleteFavMovie(movie: FavMovie) = viewModelScope.launch {
+    fun deleteFavMovie(movie: Movie) = viewModelScope.launch {
         favMovieRepository.deleteFavMovie(movie)
     }
 

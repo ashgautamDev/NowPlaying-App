@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FavMovieDao {
 
-    @Query("SELECT * FROM fav_movies")
-    fun getAllFavouritesMovies() : Flow<List<FavMovie>>
+    @Query("SELECT * FROM fav_movie")
+    fun getAllFavouritesMovies() : Flow<List<Movie>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavMovie(movie: FavMovie)
+    suspend fun insertFavMovie(movie: Movie)
 
     @Delete
-    suspend fun deleteFavMovie(movie: FavMovie)
+    suspend fun deleteFavMovie(movie: Movie)
 }
