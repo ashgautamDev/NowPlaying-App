@@ -3,8 +3,20 @@
 NowPlaying is a movie show preview app which shows the NOW PLAYING & MOST POPULAR movies around the world using the [TMDB api](https://api.themoviedb.org/), 
 & This project is built as an assignment for Cube Wealth. This app is built with using Jetpack compose and MVVM Architecture.
 
+[NowPlayApp.apk](https://drive.google.com/file/d/1NiesJWv8MtviTvefQKzbrECQx6w-BuGm/view?usp=sharing)
 
-<br />
+## Screenshots
+
+<img scr = "Screenshot/splashscreen.png" width = 200>
+
+<img scr = "Screenshot/Homescreen.png" width = 200>
+
+<img scr = "Screenshot/ChangeList.png" width = 200>
+
+<img scr = "Screenshot/offlinelist.png" width = 200>
+
+
+
 
 ## 🗼 Architecture
 

@@ -59,7 +59,7 @@ fun HomeScreen(viewModel: MainViewModel, navController: NavController) {
             }
         }
     ) {
-        if (isInternetAvailable(context)) {
+        if (networkAvailable) {
             MovieListView(viewModel = viewModel)
         } else {
             NoInternetCard(onRetry = {

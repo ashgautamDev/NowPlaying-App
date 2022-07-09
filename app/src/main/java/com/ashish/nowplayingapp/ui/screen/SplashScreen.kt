@@ -52,7 +52,7 @@ fun SplashScreen(navController: NavHostController) {
             delay(2000L)
 
             navController.navigate("home") {
-                launchSingleTop = false
+               popUpTo("home")
             }
         }
 

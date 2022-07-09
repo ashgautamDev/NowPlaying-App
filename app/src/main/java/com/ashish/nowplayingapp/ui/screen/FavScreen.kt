@@ -45,7 +45,9 @@ fun FavScreen(viewModel: MainViewModel, navController: NavController) {
 
             FavViewState.Empty -> {
                 EmptyListCard {
-                    navController.navigate("home")
+                    navController.navigate("home"){
+                        launchSingleTop = false
+                    }
                 }
             }
             is FavViewState.Success -> {
