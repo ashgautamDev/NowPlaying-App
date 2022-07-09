@@ -1,22 +1,17 @@
 # NowPlaying-App
 
-NowPlaying is a movie show preview app which shows the NOW PLAYING & MOST POPULAR movies around the world using the [TMDB api](https://api.themoviedb.org/), 
-& This project is built as an assignment for Cube Wealth. This app is built with using Jetpack compose and MVVM Architecture.
+NowPlaying is a movie show preview app which shows the NOW PLAYING & MOST POPULAR movies around the
+world using the [TMDB api](https://api.themoviedb.org/), & This project is built as an assignment
+for Cube Wealth. This app is built with using Jetpack compose and MVVM Architecture.
 
 [NowPlayApp.apk](https://drive.google.com/file/d/1NiesJWv8MtviTvefQKzbrECQx6w-BuGm/view?usp=sharing)
 
 ## Screenshots
 
-<img scr = "Screenshot/splashscreen.png" width = 200>
+| ![]( Screenshot/splashscreen.png")| | ![]( Screenshot/Homescreen.png")|
+| ![]( Screenshot/ChangeList.png")| | ![]( Screenshot/offlinelist.png")|
 
-<img scr = "Screenshot/Homescreen.png" width = 200>
-
-<img scr = "Screenshot/ChangeList.png" width = 200>
-
-<img scr = "Screenshot/offlinelist.png" width = 200>
-
-
-
+![](https://madscorecard.withgoogle.com/static/img/summary-arrows-no-app-bundle-aeeb43cbb8.svg)
 
 ## 🗼 Architecture
 
@@ -27,7 +22,6 @@ View-Model)***](https://developer.android.com/jetpack/docs/guide#recommended-app
 
 ## 🧰 Build-tool
 
-You need to
-have [Android Studio (BumbleBee) or above](https://developer.android.com/studio/preview) to
-build this project.
+You need to have [Android Studio (BumbleBee) or above](https://developer.android.com/studio/preview)
+to build this project.
 
