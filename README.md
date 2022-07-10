@@ -8,10 +8,14 @@ for Cube Wealth. This app is built with using Jetpack compose and MVVM Architect
 
 ## Screenshots
 
-| ![]( screenshot/splashscreen.png)| | ![]( screenshot/Homescreen.png)|
-| ![]( screenshot/ChangeList.png)| | ![]( screenshot/offlinelist.png)|
+||||
+|:----------------------------------------:|:-----------------------------------------:|:-----------------------------------------: |
+|<img src="screenshot/splashscreen.png" width="250" />| |<img src="screenshot/Homescreen.png" width="250" />|
+|<img src="screenshot/ChangeList.png" width="250" />| |<img src="screenshot/offlinelist.png" width="250" />|
 
-![](![image](https://user-images.githubusercontent.com/56464485/178129825-8002ad58-f9f9-4fc1-94e3-1cce2d199992.png))
+
+# MadScore 
+![image](https://user-images.githubusercontent.com/56464485/178129825-8002ad58-f9f9-4fc1-94e3-1cce2d199992.png))
 
 ## 🗼 Architecture
 
